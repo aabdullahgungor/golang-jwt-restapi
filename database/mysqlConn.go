@@ -18,7 +18,7 @@ const (
 var Instance *gorm.DB
 var errDb error
 
-func GetDB() {
+func Connect() {
 
 	Instance, errDb = gorm.Open(mysql.Open(DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ")/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if errDb != nil {
