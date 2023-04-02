@@ -18,7 +18,7 @@ const (
 var db *gorm.DB
 var errDb error
 
-func Connect()  {
+func GetDB() (*gorm.DB, error) {
 
 	db, errDb = gorm.Open(mysql.Open(DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ")/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if errDb != nil {
@@ -26,6 +26,7 @@ func Connect()  {
 		panic("Cannot connect to DB")
 	}
 	log.Println("Connected to Database!")
+	return db, nil
 }
 
 func Migrate() {
@@ -33,3 +34,7 @@ func Migrate() {
 	log.Println("Database Migration Completed!")
 }
 
+func CloseDB(connection *gorm.DB) {
+	sqldb, _ := connection.DB()
+	sqldb.Close()
+}
