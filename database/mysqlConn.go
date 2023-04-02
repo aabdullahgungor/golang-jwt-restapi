@@ -15,26 +15,22 @@ const (
 	DB_USER     = "root"
 	DB_PASSWORD = "mysql123"
 )
-var db *gorm.DB
+var Instance *gorm.DB
 var errDb error
 
-func GetDB() (*gorm.DB, error) {
+func GetDB() {
 
-	db, errDb = gorm.Open(mysql.Open(DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ")/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	Instance, errDb = gorm.Open(mysql.Open(DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ")/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if errDb != nil {
 		log.Fatal(errDb)
 		panic("Cannot connect to DB")
 	}
 	log.Println("Connected to Database!")
-	return db, nil
 }
 
 func Migrate() {
-	db.AutoMigrate(&model.User{})
+	Instance.AutoMigrate(&model.User{})
 	log.Println("Database Migration Completed!")
 }
 
-func CloseDB(connection *gorm.DB) {
-	sqldb, _ := connection.DB()
-	sqldb.Close()
-}
+
